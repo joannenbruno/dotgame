@@ -25,7 +25,6 @@ export default class extends Phaser.State {
     this.load.image('loaderBg', './assets/images/loader-bg.png')
     this.load.image('loaderBar', './assets/images/loader-bar.png')
 
-    //this.game.load.atlasJSONHash('bubble', './assets/images/bubble.png', './assets/images/bubble.json');
   }
 
   render() {
