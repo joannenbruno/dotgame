@@ -31,7 +31,7 @@ export default class extends Phaser.State {
 
     game.physics.startSystem(Phaser.Physics.ARCADE);
 
-    // slider sprites and construction --needs refactoring
+    // slider sprites and construction
     this.popSound = game.add.audio('popSound');
     this.greySlider = game.add.sprite(game.world.centerX, 100, 'greySlider');
     this.greySlider.scale.setTo(1.75, 1.75);
@@ -48,7 +48,7 @@ export default class extends Phaser.State {
     this.greySliderEnd_2.anchor.x = .5;
     this.greySliderEnd_2.anchor.y = .5;
 
-    this.greySliderDown = game.add.sprite(166.75, 100, 'greySliderDown');
+    this.greySliderDown = game.add.sprite(181, 100, 'greySliderDown');
     this.greySliderDown.anchor.x = .5;
     this.greySliderDown.anchor.y = .5;
     this.greySliderDown.inputEnabled = true;
@@ -56,6 +56,11 @@ export default class extends Phaser.State {
     let bounds = new Phaser.Rectangle(15, 100, this.greySlider.width, 0);
     this.greySliderDown.input.boundsRect = bounds;
     this.greySliderDown.input.useHandCursor = true;
+
+    this.speedText = game.add.text(10, 115, "Speed", {
+      font: "bold 16px Arial",
+      fill: "#ffffff"
+    });
 
     // logic to dictate bubble y velocity
     this.greySliderDown.events.onDragStop.add(function (e) {
