@@ -1,145 +1,159 @@
 /* globals __DEV__ */
 import Phaser from 'phaser'
-import Mushroom from '../sprites/Mushroom'
 import Bubble from '../sprites/Bubble'
 
 export default class extends Phaser.State {
   init() { }
+
   preload() { }
 
   create() {
-    /* BANNER */
-    const bannerText = 'INDEED BUBBLE GAME';
-    let banner = this.add.text(this.world.centerX, this.game.height - 80, bannerText, {
-      font: '40px Bangers',
-      fill: '#77BFA3',
-      smoothed: false
-    });
-    banner.padding.set(10, 16);
-    banner.anchor.setTo(0.5);
 
     /* HEADER ITEMS */
     this.score = 0;
-    this.points = [];
-    this.scoreText = game.add.text(10,10,"Score: ", {
-      font:"bold 20px Arial",
+    this.scoreText = game.add.text(10, 10, "Score: " + this.score, {
+      font: "bold 30px Arial",
       fill: "#ffffff"
     });
 
     game.physics.startSystem(Phaser.Physics.ARCADE);
 
+    // slider sprites and construction --needs refactoring
     this.popSound = game.add.audio('popSound');
+    this.greySlider = game.add.sprite(game.world.centerX, 100, 'greySlider');
+    this.greySlider.scale.setTo(1.75, 1.75);
+    this.greySlider.anchor.x = .5;
+    this.greySlider.anchor.y = .5;
 
-    var button = game.add.button(
-      275,
-      30,
-      'button',
-      this.pauseGame(),
-      this,
-      2,
-      1,
-      0
-    );
+    this.greySliderEnd = game.add.sprite(15, 100, 'greySliderEnd');
+    this.greySliderEnd.scale.setTo(1.75, 1.75);
+    this.greySliderEnd.anchor.x = .5;
+    this.greySliderEnd.anchor.y = .5;
 
-    button.anchor.x = .5;
-    button.anchor.y = .5;
+    this.greySliderEnd_2 = game.add.sprite(360, 100, 'greySliderEnd');
+    this.greySliderEnd_2.scale.setTo(1.75, 1.75);
+    this.greySliderEnd_2.anchor.x = .5;
+    this.greySliderEnd_2.anchor.y = .5;
+
+    this.greySliderDown = game.add.sprite(300, 100, 'greySliderDown');
+    this.greySliderDown.anchor.x = .5;
+    this.greySliderDown.anchor.y = .5;
+
+    this.gameStateButton = this.game.add.sprite(290, 30, 'button');
+    this.gameStateButton.inputEnabled = true;
+
+    this.gameStateButton.events.onInputUp.add(function (e) {
+      game.paused = true;
+      e.parent.children.forEach(function (child) {
+        if (child.text === "Pause") {
+          child.text = "Start"
+        }
+      });
+    });
+
+    this.gameStateButton.scale.setTo(0.75, 0.75);
+    this.gameStateButton.anchor.x = .5;
+    this.gameStateButton.anchor.y = .5;
+
+    this.buttonText = game.add.text(252, 12, "Pause", {
+      font: "bold 30px Arial",
+      fill: "#ffffff"
+    });
+
+    game.input.onDown.add(this.unpause, self);
 
     /* BUBBLE GAME */
-    this.bubbles = this.game.add.group();
-    this.createBubble();
-
     game.time.events.loop(Phaser.Timer.SECOND, this.createBubble, this);
-  
+
+  }
+
+  unpause() {
+    game.paused = false;
+
+    game.world.children.forEach(function (child) {
+      if (child.text === "Start") {
+        child.text = "Pause"
+      }
+    });
   }
 
   createBubble() {
 
-      this.bubble = new Bubble({
-        game: this.game,
-        x: this.game.world.randomX,
-        y: 100,
-        asset: 'bubble',
-        frame: 0
-      });
+    this.bubble = new Bubble({
+      game: this.game,
+      x: this.game.world.randomX,
+      y: 130,
+      asset: 'bubble',
+      frame: 0
+    });
 
-      //enable click events
-      this.bubble.inputEnabled = true;
-      this.bubble.input.useHandCursor = true;
-      this.bubble.events.onInputDown.add(this.pop, this);
-      this.bubble.events.onInputDown.add(this.updateScore, this);
-      //scale to random dot sizes between 10-100px
-      var randSize = this.rnd.realInRange(0.025, 0.25)
-      this.bubble.scale.setTo(randSize, randSize);
-      this.bubble.inputEnabed = true;
+    //enable click events
+    this.bubble.inputEnabled = true;
+    this.bubble.input.useHandCursor = true;
+    this.bubble.events.onInputDown.add(this.pop, this);
+    this.bubble.events.onInputDown.add(this.updateScore, this);
 
+    //scale to random dot sizes between 10-100px
+    var randSize = this.rnd.realInRange(0.025, 0.25)
+    this.bubble.scale.setTo(randSize, randSize);
 
-      //adds bubble velocity to 100px/s
-      game.physics.enable( [this.bubble], Phaser.Physics.ARCADE);
-      this.bubble.body.velocity.y = 100;
+    //adds bubble velocity to 100px/s
+    game.physics.enable([this.bubble], Phaser.Physics.ARCADE);
+    this.bubble.body.velocity.y = 100;
 
-      this.game.world.addChild(this.bubble);
+    this.game.world.addChild(this.bubble);
 
   }
 
   pop(selectedBubble) {
-    selectedBubble.animations.add('pop', [0,1,2,3,4,5,6,7,8,9,10,11,12]);
+    selectedBubble.inputEnabled = false;
+
+    selectedBubble.animations.add('pop', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
     selectedBubble.animations.play('pop', 48, false, true);
     this.popSound.play();
 
-    this.updateScore(selectedBubble)
+    this.updateScore(selectedBubble);
   }
-  updateScore (selectedBubble) {
 
+  updateScore(selectedBubble) {
     if (selectedBubble.width >= 10 && selectedBubble.width < 20) {
-      this.score +=10;
+      this.score += 10;
     }
     else if (selectedBubble.width >= 20 && selectedBubble.width < 30) {
-      this.score +=9;
+      this.score += 9;
     }
     else if (selectedBubble.width >= 30 && selectedBubble.width < 40) {
-      this.score +=8;
+      this.score += 8;
     }
     else if (selectedBubble.width >= 40 && selectedBubble.width < 50) {
-      this.score +=7;
+      this.score += 7;
     }
     else if (selectedBubble.width >= 50 && selectedBubble.width < 60) {
-      this.score +=6;
+      this.score += 6;
     }
     else if (selectedBubble.width >= 60 && selectedBubble.width < 70) {
-      this.score +=5;
+      this.score += 5;
     }
     else if (selectedBubble.width >= 70 && selectedBubble.width < 80) {
-      this.score +=4;
+      this.score += 4;
     }
     else if (selectedBubble.width >= 80 && selectedBubble.width < 90) {
-      this.score +=3;
+      this.score += 3;
     }
     else if (selectedBubble.width >= 90 && selectedBubble.width < 100) {
-      this.score +=2;
+      this.score += 2;
     }
     else {
-      this.score ++;
+      this.score++;
     }
-        this.scoreText.text = "Score: " + this.score;
-  }
-
-  pauseGame() {
-    console.log("Game PAUSED.");
+    this.scoreText.text = "Score: " + this.score;
   }
 
   render() {
     // if (__DEV__) {
     //   this.game.debug.spriteInfo(this.bubble, 32, 32)
-    //   //this.game.debug.spriteInfo(this.mushroom, 32, 32)
     // }
   }
 
-  update() {
-
-    // this.bubble.y += 5; //change to speed variable from slider
-    // if (this.bubble.y >= this.game.world.height) {
-    //   this.bubble.destroy();
-    //   //this.createBubble();
-    // }
-  }
+  update() { }
 }

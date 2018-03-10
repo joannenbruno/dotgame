@@ -5,20 +5,28 @@ export default class extends Phaser.State {
   init () {}
 
   preload () {
-    this.loaderBg = this.add.sprite(this.game.world.centerX, this.game.world.centerY, 'loaderBg');
-    this.loaderBar = this.add.sprite(this.game.world.centerX, this.game.world.centerY, 'loaderBar');
-    centerGameObjects([this.loaderBg, this.loaderBar]);
 
-    this.load.setPreloadSprite(this.loaderBar);
-    //
-    // load your assets
-    this.load.image('mushroom', 'assets/images/mushroom2.png');
+    /* BANNER */
+    const bannerText = 'INDEED BUBBLE GAME';
+    let banner = this.add.text(this.world.centerX, this.game.height - 80, bannerText, {
+      font: '40px Bangers',
+      fill: '#77BFA3',
+      smoothed: false
+    });
+    banner.padding.set(10, 16);
+    banner.anchor.setTo(0.5);
+  
+    /*ASSETS*/
     this.load.spritesheet('bubble','assets/images/bubble.png', 400, 400, 12);
     this.load.spritesheet('button', 'assets/images/button.png',190, 49, 2);
     this.load.audio('popSound','assets/audio/dustyroom_cartoon_bubble_pop.mp3')
+    this.load.image('greySlider','assets/images/grey_sliderHorizontal.png');
+    this.load.image('greySliderEnd','assets/images/grey_sliderEnd.png');
+    this.load.image('greySliderDown','assets/images/grey_sliderDown.png');
   }
 
   create () {
     this.state.start('Game');
   }
+
 }
