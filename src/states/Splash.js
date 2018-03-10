@@ -2,9 +2,9 @@ import Phaser from 'phaser'
 import { centerGameObjects } from '../utils'
 
 export default class extends Phaser.State {
-  init () {}
+  init() { }
 
-  preload () {
+  preload() {
 
     /* BANNER */
     const bannerText = 'INDEED BUBBLE GAME';
@@ -15,17 +15,17 @@ export default class extends Phaser.State {
     });
     banner.padding.set(10, 16);
     banner.anchor.setTo(0.5);
-  
+
     /*ASSETS*/
-    this.load.spritesheet('bubble','assets/images/bubble.png', 400, 400, 12);
-    this.load.spritesheet('button', 'assets/images/button.png',190, 49, 2);
-    this.load.audio('popSound','assets/audio/dustyroom_cartoon_bubble_pop.mp3')
-    this.load.image('greySlider','assets/images/grey_sliderHorizontal.png');
-    this.load.image('greySliderEnd','assets/images/grey_sliderEnd.png');
-    this.load.image('greySliderDown','assets/images/grey_sliderDown.png');
+    this.load.spritesheet('bubble', 'assets/images/bubble.png', 400, 400, 12);
+    this.load.spritesheet('button', 'assets/images/button.png', 190, 49, 2);
+    this.load.audio('popSound', 'assets/audio/dustyroom_cartoon_bubble_pop.mp3')
+    this.load.image('greySlider', 'assets/images/grey_sliderHorizontal.png');
+    this.load.image('greySliderEnd', 'assets/images/grey_sliderEnd.png');
+    this.load.image('greySliderDown', 'assets/images/grey_sliderDown.png');
   }
 
-  create () {
+  create() {
     this.state.start('Game');
   }
 

@@ -3,6 +3,19 @@ import Phaser from 'phaser'
 import Bubble from '../sprites/Bubble'
 
 export default class extends Phaser.State {
+  constructor() {
+    super();
+    this.yVelocity = 50;
+  }
+
+  get velocity() {
+    this.yVelocity;
+  }
+
+  set velocity(velocityIncrease) {
+    this.yVelocity = velocityIncrease;
+  }
+
   init() { }
 
   preload() { }
@@ -35,9 +48,54 @@ export default class extends Phaser.State {
     this.greySliderEnd_2.anchor.x = .5;
     this.greySliderEnd_2.anchor.y = .5;
 
-    this.greySliderDown = game.add.sprite(300, 100, 'greySliderDown');
+    this.greySliderDown = game.add.sprite(166.75, 100, 'greySliderDown');
     this.greySliderDown.anchor.x = .5;
     this.greySliderDown.anchor.y = .5;
+    this.greySliderDown.inputEnabled = true;
+    this.greySliderDown.input.enableDrag();
+    let bounds = new Phaser.Rectangle(15, 100, this.greySlider.width, 0);
+    this.greySliderDown.input.boundsRect = bounds;
+    this.greySliderDown.input.useHandCursor = true;
+
+    // logic to dictate bubble y velocity
+    this.greySliderDown.events.onDragStop.add(function (e) {
+      var xCoordinate = this.greySliderDown.x;
+
+      if (xCoordinate >= 29 && xCoordinate < 59.45) {
+        this.yVelocity = 10;
+      }
+      else if (xCoordinate >= 59.45 && xCoordinate < 89.9) {
+        this.yVelocity = 20;
+      }
+      else if (xCoordinate >= 89.9 && xCoordinate < 120.35) {
+        this.yVelocity = 30;
+      }
+      else if (xCoordinate >= 120.35 && xCoordinate < 150.8) {
+        this.yVelocity = 40;
+      }
+      else if (xCoordinate >= 150.8 && xCoordinate < 181.25) {
+        this.yVelocity = 50;
+      }
+      else if (xCoordinate >= 181.25 && xCoordinate < 211.7) {
+        this.yVelocity = 60;
+      }
+      else if (xCoordinate >= 211.7 && xCoordinate < 242.15) {
+        this.yVelocity = 70;
+      }
+      else if (xCoordinate >= 242.15 && xCoordinate < 272.6) {
+        this.yVelocity = 80;
+      }
+      else if (xCoordinate >= 272.6 && xCoordinate < 303.05) {
+        this.yVelocity = 90;
+      }
+      else if (xCoordinate >= 303.05 && xCoordinate < 333.5) {
+        this.yVelocity = 100;
+      }
+      else {
+        this.yVelocity = 50;
+      }
+      
+    }, this);
 
     this.gameStateButton = this.game.add.sprite(290, 30, 'button');
     this.gameStateButton.inputEnabled = true;
@@ -78,7 +136,6 @@ export default class extends Phaser.State {
   }
 
   createBubble() {
-
     this.bubble = new Bubble({
       game: this.game,
       x: this.game.world.randomX,
@@ -99,7 +156,7 @@ export default class extends Phaser.State {
 
     //adds bubble velocity to 100px/s
     game.physics.enable([this.bubble], Phaser.Physics.ARCADE);
-    this.bubble.body.velocity.y = 100;
+    this.bubble.body.velocity.y = this.yVelocity;
 
     this.game.world.addChild(this.bubble);
 
