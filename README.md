@@ -1,4 +1,5 @@
 # DotGame
+[![CircleCI](https://circleci.com/gh/joannenbruno/dotgame/tree/master.svg?style=shield)](https://circleci.com/gh/joannenbruno/dotgame/tree/master)
 
 To run
 ------
