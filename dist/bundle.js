@@ -10921,6 +10921,7 @@ var _class = function (_Phaser$State) {
     key: 'init',
     value: function init() {
       game.physics.startSystem(_phaser2.default.Physics.ARCADE);
+      game.physics.setBoundsToWorld();
     }
   }, {
     key: 'preload',
@@ -10948,8 +10949,7 @@ var _class = function (_Phaser$State) {
     value: function createSlider() {
       this.greySlider = game.add.sprite(game.world.centerX, 100, 'greySlider');
       this.greySlider.scale.setTo(1.75, 1.75);
-      this.greySlider.anchor.x = .5;
-      this.greySlider.anchor.y = .5;
+      this.greySlider.anchor.setTo(0.5);
 
       this.greySliderEnd = game.add.sprite(15, 100, 'greySliderEnd');
       this.greySliderEnd.scale.setTo(1.75, 1.75);
@@ -10960,10 +10960,10 @@ var _class = function (_Phaser$State) {
       this.greySliderEnd_2.anchor.set(0.5);
 
       this.greySliderDown = game.add.sprite(181, 100, 'greySliderDown');
-      this.greySliderDown.anchor.setTo(0.5);
+      this.greySliderDown.anchor.setTo(0.5, 0.5);
       this.greySliderDown.inputEnabled = true;
-      this.greySliderDown.input.enableDrag();
-      var bounds = new _phaser2.default.Rectangle(15, 100, this.greySlider.width, 0);
+      this.greySliderDown.input.enableDrag(true);
+      var bounds = new _phaser2.default.Rectangle(15, 100, 360, 0);
       this.greySliderDown.input.boundsRect = bounds;
       this.greySliderDown.input.useHandCursor = true;
 
@@ -11071,6 +11071,10 @@ var _class = function (_Phaser$State) {
       this.bubble.body.velocity.y = this.yVelocity;
 
       this.game.world.addChild(this.bubble);
+
+      //check world bounds
+      this.bubble.checkWorldBounds = true;
+      this.bubble.outOfBoundsKill = true;
     }
   }, {
     key: 'pop',

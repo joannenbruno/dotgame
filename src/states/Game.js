@@ -18,6 +18,7 @@ export default class extends Phaser.State {
 
   init() {
     game.physics.startSystem(Phaser.Physics.ARCADE);
+    game.physics.setBoundsToWorld();
   }
 
   preload() {
@@ -42,8 +43,7 @@ export default class extends Phaser.State {
   createSlider() {
     this.greySlider = game.add.sprite(game.world.centerX, 100, 'greySlider');
     this.greySlider.scale.setTo(1.75, 1.75);
-    this.greySlider.anchor.x = .5;
-    this.greySlider.anchor.y = .5;
+    this.greySlider.anchor.setTo(0.5);
 
     this.greySliderEnd = game.add.sprite(15, 100, 'greySliderEnd');
     this.greySliderEnd.scale.setTo(1.75, 1.75);
@@ -54,10 +54,10 @@ export default class extends Phaser.State {
     this.greySliderEnd_2.anchor.set(0.5);
 
     this.greySliderDown = game.add.sprite(181, 100, 'greySliderDown');
-    this.greySliderDown.anchor.setTo(0.5);
+    this.greySliderDown.anchor.setTo(0.5,0.5);
     this.greySliderDown.inputEnabled = true;
-    this.greySliderDown.input.enableDrag();
-    let bounds = new Phaser.Rectangle(15, 100, this.greySlider.width, 0);
+    this.greySliderDown.input.enableDrag(true);
+    let bounds = new Phaser.Rectangle(15, 100, 360, 0);
     this.greySliderDown.input.boundsRect = bounds;
     this.greySliderDown.input.useHandCursor = true;
 
@@ -172,7 +172,6 @@ export default class extends Phaser.State {
     this.bubble.body.velocity.y = this.yVelocity;
 
     this.game.world.addChild(this.bubble);
-
   }
 
   pop(selectedBubble) {
