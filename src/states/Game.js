@@ -16,11 +16,23 @@ export default class extends Phaser.State {
     this.yVelocity = velocityIncrease;
   }
 
-  init() { }
+  init() { 
+
+   }
 
   preload() { }
 
   create() {
+
+    /* BANNER */
+    const bannerText = 'BUBBLE "DOT" GAME';
+    let banner = this.add.text(this.world.centerX, this.game.height - 80, bannerText, {
+      font: '40px Bangers',
+      fill: '#77BFA3',
+      smoothed: false
+    });
+    banner.padding.set(10, 16);
+    banner.anchor.setTo(0.5);
 
     /* HEADER ITEMS */
     this.score = 0;
@@ -119,7 +131,7 @@ export default class extends Phaser.State {
     this.gameStateButton.anchor.y = .5;
 
     this.buttonText = game.add.text(252, 12, "Pause", {
-      font: "bold 30px Arial",
+      font: "30px Arial",
       fill: "#ffffff"
     });
 

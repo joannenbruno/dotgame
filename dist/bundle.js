@@ -4257,7 +4257,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = {
   gameWidth: 375,
   gameHeight: 667,
-  localStorageName: 'phaseres6webpack',
+  localStorageName: 'dotgame',
   webfonts: ['Bangers']
 };
 
@@ -10806,16 +10806,16 @@ var _class = function (_Phaser$State) {
     value: function preload() {
 
       /* BANNER */
-      var bannerText = 'INDEED BUBBLE GAME';
-      var banner = this.add.text(this.world.centerX, this.game.height - 80, bannerText, {
-        font: '40px Bangers',
-        fill: '#77BFA3',
+      var bannerText = 'Bubble "Dot" Game';
+      var banner = this.add.text(this.world.centerX, this.world.centerY - 80, bannerText, {
+        font: 'bold 35px Arial',
+        fill: '#FFFFFF',
         smoothed: false
       });
       banner.padding.set(10, 16);
       banner.anchor.setTo(0.5);
 
-      /*ASSETS*/
+      /* ASSETS */
       this.load.spritesheet('bubble', 'assets/images/bubble.png', 400, 400, 12);
       this.load.spritesheet('button', 'assets/images/button.png', 190, 49, 2);
       this.load.audio('popSound', 'assets/audio/dustyroom_cartoon_bubble_pop.mp3');
@@ -10826,7 +10826,21 @@ var _class = function (_Phaser$State) {
   }, {
     key: 'create',
     value: function create() {
-      this.state.start('Game');
+
+      this.startButton = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'button');
+      this.startButton.inputEnabled = true;
+
+      this.startButton.events.onInputUp.add(function (e) {
+        game.paused = false;
+        e.game.state.start('Game');
+      });
+      this.startButton.anchor.setTo(0.5);
+
+      this.startButtonText = game.add.text(this.game.world.centerX, this.game.world.centerY, "Start", {
+        font: "30px Arial",
+        fill: "#ffffff"
+      });
+      this.startButtonText.anchor.setTo(0.5);
     }
   }]);
 
@@ -10912,6 +10926,16 @@ var _class = function (_Phaser$State) {
   }, {
     key: 'create',
     value: function create() {
+
+      /* BANNER */
+      var bannerText = 'BUBBLE "DOT" GAME';
+      var banner = this.add.text(this.world.centerX, this.game.height - 80, bannerText, {
+        font: '40px Bangers',
+        fill: '#77BFA3',
+        smoothed: false
+      });
+      banner.padding.set(10, 16);
+      banner.anchor.setTo(0.5);
 
       /* HEADER ITEMS */
       this.score = 0;
@@ -10999,7 +11023,7 @@ var _class = function (_Phaser$State) {
       this.gameStateButton.anchor.y = .5;
 
       this.buttonText = game.add.text(252, 12, "Pause", {
-        font: "bold 30px Arial",
+        font: "30px Arial",
         fill: "#ffffff"
       });
 
