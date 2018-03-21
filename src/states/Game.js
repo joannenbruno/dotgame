@@ -16,35 +16,30 @@ export default class extends Phaser.State {
     this.yVelocity = velocityIncrease;
   }
 
-  init() { 
+  init() {
+    game.physics.startSystem(Phaser.Physics.ARCADE);
+  }
 
-   }
-
-  preload() { }
+  preload() {
+    this.popSound = game.add.audio('popSound');
+  }
 
   create() {
-
-    /* BANNER */
-    const bannerText = 'BUBBLE "DOT" GAME';
-    let banner = this.add.text(this.world.centerX, this.game.height - 80, bannerText, {
-      font: '40px Bangers',
-      fill: '#77BFA3',
-      smoothed: false
-    });
-    banner.padding.set(10, 16);
-    banner.anchor.setTo(0.5);
-
     /* HEADER ITEMS */
     this.score = 0;
     this.scoreText = game.add.text(10, 10, "Score: " + this.score, {
       font: "bold 30px Arial",
       fill: "#ffffff"
     });
+    this.line = new Phaser.Line(0,150,game.world.width,150);
+    this.createSlider();
+    this.createGameStateButton();
 
-    game.physics.startSystem(Phaser.Physics.ARCADE);
+    /* BUBBLE GAME */
+    game.time.events.loop(Phaser.Timer.SECOND, this.createBubble, this);
+  }
 
-    // slider sprites and construction
-    this.popSound = game.add.audio('popSound');
+  createSlider() {
     this.greySlider = game.add.sprite(game.world.centerX, 100, 'greySlider');
     this.greySlider.scale.setTo(1.75, 1.75);
     this.greySlider.anchor.x = .5;
@@ -52,33 +47,33 @@ export default class extends Phaser.State {
 
     this.greySliderEnd = game.add.sprite(15, 100, 'greySliderEnd');
     this.greySliderEnd.scale.setTo(1.75, 1.75);
-    this.greySliderEnd.anchor.x = .5;
-    this.greySliderEnd.anchor.y = .5;
+    this.greySliderEnd.anchor.setTo(0.5);
 
     this.greySliderEnd_2 = game.add.sprite(360, 100, 'greySliderEnd');
     this.greySliderEnd_2.scale.setTo(1.75, 1.75);
-    this.greySliderEnd_2.anchor.x = .5;
-    this.greySliderEnd_2.anchor.y = .5;
+    this.greySliderEnd_2.anchor.set(0.5);
 
     this.greySliderDown = game.add.sprite(181, 100, 'greySliderDown');
-    this.greySliderDown.anchor.x = .5;
-    this.greySliderDown.anchor.y = .5;
+    this.greySliderDown.anchor.setTo(0.5);
     this.greySliderDown.inputEnabled = true;
     this.greySliderDown.input.enableDrag();
     let bounds = new Phaser.Rectangle(15, 100, this.greySlider.width, 0);
     this.greySliderDown.input.boundsRect = bounds;
     this.greySliderDown.input.useHandCursor = true;
 
-    this.speedText = game.add.text(10, 115, "Speed", {
-      font: "bold 16px Arial",
+    this.speedText = game.add.text(10, 115, "Speed: " + this.yVelocity + " pps", {
+      font: "bold 20px Arial",
       fill: "#ffffff"
     });
 
-    // logic to dictate bubble y velocity
+    this.setVelocityOnStop();
+  }
+
+  setVelocityOnStop() {
     this.greySliderDown.events.onDragStop.add(function (e) {
       var xCoordinate = this.greySliderDown.x;
 
-      if (xCoordinate >= 29 && xCoordinate < 59.45) {
+      if (xCoordinate >= 0 && xCoordinate < 59.45) {
         this.yVelocity = 10;
       }
       else if (xCoordinate >= 59.45 && xCoordinate < 89.9) {
@@ -105,20 +100,25 @@ export default class extends Phaser.State {
       else if (xCoordinate >= 272.6 && xCoordinate < 303.05) {
         this.yVelocity = 90;
       }
-      else if (xCoordinate >= 303.05 && xCoordinate < 333.5) {
+      else if (xCoordinate >= 303.05 && xCoordinate < game.world.width) {
         this.yVelocity = 100;
       }
       else {
         this.yVelocity = 50;
       }
-      
-    }, this);
 
+    }, this);
+  }
+
+  createGameStateButton() {
     this.gameStateButton = this.game.add.sprite(290, 30, 'button');
     this.gameStateButton.inputEnabled = true;
 
     this.gameStateButton.events.onInputUp.add(function (e) {
       game.paused = true;
+      if (e.frame === 1) {
+        e.frame = 0
+      }
       e.parent.children.forEach(function (child) {
         if (child.text === "Pause") {
           child.text = "Start"
@@ -126,25 +126,21 @@ export default class extends Phaser.State {
       });
     });
 
-    this.gameStateButton.scale.setTo(0.75, 0.75);
-    this.gameStateButton.anchor.x = .5;
-    this.gameStateButton.anchor.y = .5;
+    this.gameStateButton.scale.setTo(0.75);
+    this.gameStateButton.anchor.setTo(0.5)
 
-    this.buttonText = game.add.text(252, 12, "Pause", {
-      font: "30px Arial",
+    this.buttonText = game.add.text(290, 30, "Pause", {
+      font: "25px Arial",
       fill: "#ffffff"
     });
+    this.buttonText.anchor.setTo(0.5);
 
     game.input.onDown.add(this.unpause, self);
-
-    /* BUBBLE GAME */
-    game.time.events.loop(Phaser.Timer.SECOND, this.createBubble, this);
-
   }
 
-  unpause() {
+  unpause(gameStateButton) {
     game.paused = false;
-
+    gameStateButton.frame = 1;
     game.world.children.forEach(function (child) {
       if (child.text === "Start") {
         child.text = "Pause"
@@ -156,7 +152,7 @@ export default class extends Phaser.State {
     this.bubble = new Bubble({
       game: this.game,
       x: this.game.world.randomX,
-      y: 130,
+      y: 165,
       asset: 'bubble',
       frame: 0
     });
@@ -223,11 +219,27 @@ export default class extends Phaser.State {
     this.scoreText.text = "Score: " + this.score;
   }
 
+  updateButtonFrame() {
+    if(this.buttonText.text == "Pause") {
+      this.gameStateButton.frame = 1;
+    }
+    else if (this.buttonText.text == "Start"){
+      this.gameStateButton.frame = 0;
+    }
+    else
+      this.gameStateButton.frame = 1;
+  }
+
   render() {
+    game.debug.geom(this.line, '#FFF')
     // if (__DEV__) {
     //   this.game.debug.spriteInfo(this.bubble, 32, 32)
     // }
   }
 
-  update() { }
+  update() {
+    this.speedText.text = "Speed: " + this.yVelocity + " pps";
+
+    this.updateButtonFrame();
+  }
 }

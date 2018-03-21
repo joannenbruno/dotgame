@@ -10,7 +10,7 @@ export default class extends Phaser.State {
     const bannerText = 'Bubble "Dot" Game';
     let banner = this.add.text(this.world.centerX, this.world.centerY -80, bannerText, {
       font: 'bold 35px Arial',
-      fill: '#FFFFFF',
+      fill: '#FFF',
       smoothed: false
     });
     banner.padding.set(10, 16);
@@ -39,7 +39,7 @@ export default class extends Phaser.State {
 
     this.startButtonText = game.add.text(this.game.world.centerX, this.game.world.centerY, "Start", {
       font: "30px Arial",
-      fill: "#ffffff"
+      fill: "#FFF"
     });
     this.startButtonText.anchor.setTo(0.5);
 
