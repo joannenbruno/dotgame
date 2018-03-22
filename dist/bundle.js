@@ -11071,10 +11071,6 @@ var _class = function (_Phaser$State) {
       this.bubble.body.velocity.y = this.yVelocity;
 
       this.game.world.addChild(this.bubble);
-
-      //check world bounds
-      this.bubble.checkWorldBounds = true;
-      this.bubble.outOfBoundsKill = true;
     }
   }, {
     key: 'pop',

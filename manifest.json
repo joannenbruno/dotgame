@@ -1,0 +1,17 @@
+{
+    "name": "Bubble Dot Game",
+    "short_name": "DotGame",
+    "icons": [
+        {
+            "src": "/favicon.png",
+            "type": "png",
+            "sizes": "96x96"
+        }
+    ],
+    "start_url": "/",
+    "scope": "/",
+    "display": "standalone",
+    "orientation": "portrait",
+    "background_color": "#FDD835",
+    "theme_color": "#FDD835"
+}
