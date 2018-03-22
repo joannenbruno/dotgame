@@ -8,19 +8,19 @@
             "sizes": "310x310"
         },
         {
-          "src": "\/android-icon-144x144.png",
+          "src": "android-icon-144x144.png",
           "sizes": "144x144",
           "type": "image\/png",
           "density": "3.0"
         },
         {
-          "src": "\/apple-icon-144x144.png",
+          "src": "apple-icon-144x144.png",
           "sizes": "144x144",
           "type": "image\/png",
           "density": "3.0"
         },
         {
-          "src": "\/ms-icon-144x144.png",
+          "src": "ms-icon-144x144.png",
           "sizes": "144x144",
           "type": "image\/png",
           "density": "3.0"
