@@ -3,7 +3,7 @@
     "short_name": "DotGame",
     "icons": [
         {
-            "src": "/favicon.png",
+            "src": "favicon.png",
             "type": "png",
             "sizes": "310x310"
         }
